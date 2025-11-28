@@ -1,11 +1,13 @@
 {
   "version": 2,
   "builds": [
-    { "src": "index.html", "use": "@vercel/static" }
+    { "src": "index.html", "use": "@vercel/static" },
+    { "src": "styles.css", "use": "@vercel/static" },
+    { "src": "script.js", "use": "@vercel/static" },
+    { "src": "professional-headshot-of-vivek-m-a-cse-student.jpg", "use": "@vercel/static" }
   ],
   "routes": [
     { "handle": "filesystem" },
-    { "src": "/(.*\\.(js|css|png|jpg|jpeg|gif|svg|webp|ico|json))", "dest": "/$1" },
     { "src": "/(.*)", "dest": "/index.html" }
   ]
 }
