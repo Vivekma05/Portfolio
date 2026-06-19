@@ -3,24 +3,37 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Vivek M A - Portfolio</title>
+  <title>Vivek M A — ML Engineer & AI Systems Developer</title>
+  <meta name="description" content="Portfolio of Vivek M A — ML Engineer & AI Systems Developer. Building production-grade AI systems, deep learning models, and full-stack applications.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
-  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.js"></script>
 </head>
-<body>
+<body class="dark">
+
+  <!-- Custom Cursor -->
+  <div id="cursor-dot" class="cursor-dot"></div>
+  <div id="cursor-ring" class="cursor-ring"></div>
+
+  <!-- Noise Overlay -->
+  <div class="noise-overlay"></div>
+
   <!-- Navigation -->
   <nav id="navigation">
     <div class="nav-container">
       <div class="nav-content">
-        <div class="logo">DevPortfolio</div>
-        
+        <div class="logo">
+          <span class="logo-bracket">&lt;</span>Vivek<span class="logo-dot">.</span>dev<span class="logo-bracket">/&gt;</span>
+        </div>
+
         <div class="nav-desktop">
           <button data-section="hero">Home</button>
           <button data-section="about">About</button>
           <button data-section="skills">Skills</button>
           <button data-section="projects">Projects</button>
           <button data-section="timeline">Timeline</button>
-          <button data-section="blog">Blog</button>
           <button data-section="contact">Contact</button>
         </div>
 
@@ -35,7 +48,6 @@
         <button data-section="skills">Skills</button>
         <button data-section="projects">Projects</button>
         <button data-section="timeline">Timeline</button>
-        <button data-section="blog">Blog</button>
         <button data-section="contact">Contact</button>
       </div>
     </div>
@@ -43,32 +55,39 @@
 
   <!-- Theme Toggle -->
   <button id="theme-toggle" class="theme-toggle">
-    <i data-lucide="sun" class="sun-icon"></i>
-    <i data-lucide="moon" class="moon-icon hidden"></i>
+    <i data-lucide="sun" class="sun-icon hidden"></i>
+    <i data-lucide="moon" class="moon-icon"></i>
   </button>
 
   <!-- Hero Section -->
   <section id="hero" class="hero-section">
     <canvas id="particle-canvas"></canvas>
-    
+    <div class="aurora-bg">
+      <div class="aurora aurora-1"></div>
+      <div class="aurora aurora-2"></div>
+      <div class="aurora aurora-3"></div>
+    </div>
+
     <div class="hero-content">
       <div class="badge animate-slideDown">
+        <span class="badge-pulse"></span>
         <i data-lucide="sparkles"></i>
-        <span>Welcome to my portfolio</span>
+        <span>Available for opportunities</span>
       </div>
 
       <div class="hero-header animate-slideDown">
-        <h2>Vivek M A</h2>
+        <h2>Hi, I'm</h2>
+        <h1 class="hero-name">Vivek M A</h1>
         <p class="branch">Computer Science Engineering</p>
       </div>
 
-      <h1 class="hero-title animate-slideDown">
-        AI/ML Engineer &<br/>
-        Full-Stack Developer
-      </h1>
+      <h2 class="hero-title animate-slideDown">
+        ML Engineer &<br/>
+        AI Systems Developer
+      </h2>
 
       <p class="hero-description animate-slideUp">
-        Building intelligent systems and scalable applications. Currently exploring advanced AI/ML systems, real-time data processing, and elegant user experiences.
+        Final-year CSE undergraduate building production-grade AI systems — autonomous multi-agent LLM pipelines, deep learning medical imaging models, real-time computer vision, and safety-critical applications.
       </p>
 
       <div class="hero-specialized animate-slideUp">
@@ -80,22 +99,28 @@
       </div>
 
       <div class="hero-features">
-        <div class="feature-card">
-          <i data-lucide="code-2"></i>
+        <div class="feature-card glass-card">
+          <div class="feature-icon-wrap">
+            <i data-lucide="code-2"></i>
+          </div>
           <p>Full-Stack</p>
         </div>
-        <div class="feature-card">
-          <i data-lucide="lightbulb"></i>
+        <div class="feature-card glass-card">
+          <div class="feature-icon-wrap">
+            <i data-lucide="brain"></i>
+          </div>
           <p>AI/ML</p>
         </div>
-        <div class="feature-card">
-          <i data-lucide="zap"></i>
+        <div class="feature-card glass-card">
+          <div class="feature-icon-wrap">
+            <i data-lucide="zap"></i>
+          </div>
           <p>Real-time</p>
         </div>
       </div>
 
       <div class="hero-cta">
-        <button class="btn-primary" data-scroll="projects">
+        <button class="btn-primary glow-btn" data-scroll="projects">
           <span>View My Projects</span>
           <i data-lucide="sparkles"></i>
         </button>
@@ -117,10 +142,11 @@
             <img src="1CD23CS194.jpg" alt="Vivek M A">
           </div>
 
-          <div class="info-card">
+          <div class="info-card glass-card">
             <h3>Vivek M A</h3>
-            <p class="subtitle">Computer Science Engineering</p>
-            <p class="student">5th Year BE Student</p>
+            <p class="subtitle">B.E in Computer Science & Engineering</p>
+            <p class="student">Final Year · CGPA: 9.38/10</p>
+            <p class="student">Cambridge Institute of Technology, Bangalore</p>
 
             <div class="social-links">
               <a href="https://github.com/Vivekma05" target="_blank" aria-label="GitHub">
@@ -134,52 +160,46 @@
               </a>
             </div>
           </div>
-
-          <div class="stats-grid">
-            <div class="stat-card">
-              <div class="stat-value">50+</div>
-              <div class="stat-label">Projects</div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-value">15+</div>
-              <div class="stat-label">Hackathons</div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-value">95%</div>
-              <div class="stat-label">ML Accuracy</div>
-            </div>
-          </div>
         </div>
 
         <div class="about-right">
           <div class="section-header animate-slideUp">
-            <p class="section-label">About Me</p>
+            <p class="section-label">
+              <span class="label-line"></span>
+              About Me
+            </p>
             <h2>Building Intelligent Systems for Tomorrow</h2>
           </div>
 
           <div class="about-bio">
-            <p>I'm passionate about creating intelligent systems that solve real-world problems. With a strong foundation in machine learning, deep learning, and full-stack development, I blend AI capabilities with scalable backend architectures and intuitive frontend designs.</p>
-            
-            <p>My journey spans from building computer vision models using MediaPipe to developing production-ready web applications with the MERN stack. I love exploring emerging AI technologies like LangChain and implementing them in practical applications.</p>
-            
-            <p>Currently focused on AI/ML applications, I'm continuously learning and applying cutting-edge techniques to create solutions that make a meaningful impact. Whether it's natural language processing, computer vision, or full-stack development, I approach every project with curiosity and dedication.</p>
+            <p>I'm a final-year CSE undergraduate and aspiring ML Engineer with hands-on experience building production-grade AI systems in Python — including autonomous multi-agent LLM pipelines, deep learning medical imaging models, real-time computer vision systems, and safety-critical mobile applications.</p>
+
+            <p>Skilled in PyTorch, TensorFlow, FastAPI, LangChain, and full-stack development. Currently working on hierarchical NLP models using Transformer attention mechanisms and research at Samsung PRISM.</p>
+
+            <p>Whether it's training a DenseNet121+CBAM model to detect pneumonia, building an autonomous agent system with vector memory, or designing interpretable NLP architectures — I approach every project with rigor and curiosity.</p>
           </div>
 
           <div class="expertise-grid">
-            <div class="expertise-card">
-              <i data-lucide="code-2"></i>
-              <h3>Full-Stack Development</h3>
-              <p>Building scalable web applications with React, Node.js, and modern databases. Experienced with MERN stack and deployment strategies.</p>
-            </div>
-            <div class="expertise-card">
-              <i data-lucide="trophy"></i>
+            <div class="expertise-card glass-card">
+              <div class="expertise-icon-wrap">
+                <i data-lucide="code-2"></i>
+              </div>
               <h3>AI/ML Systems</h3>
-              <p>Developing intelligent systems using TensorFlow, PyTorch, and LangChain. Specialized in NLP, computer vision, and LLM applications.</p>
+              <p>Building deep learning models with PyTorch & TensorFlow — CNNs, Transformers, NLP, Computer Vision, RAG pipelines, and attention mechanisms like CBAM.</p>
             </div>
-            <div class="expertise-card full-width">
-              <i data-lucide="book-open"></i>
-              <h3>Automation & DevOps</h3>
-              <p>Containerizing applications with Docker, orchestrating with Kubernetes, and automating deployment pipelines for reliable production systems.</p>
+            <div class="expertise-card glass-card">
+              <div class="expertise-icon-wrap">
+                <i data-lucide="trophy"></i>
+              </div>
+              <h3>Backend & APIs</h3>
+              <p>Building backend services with FastAPI, REST APIs, Redis queues, and databases like PostgreSQL, MongoDB, ChromaDB, and FAISS for vector search.</p>
+            </div>
+            <div class="expertise-card full-width glass-card">
+              <div class="expertise-icon-wrap">
+                <i data-lucide="book-open"></i>
+              </div>
+              <h3>Research & Innovation</h3>
+              <p>Samsung PRISM research collaborator. Working on hierarchical NLP models, interpretability with Captum & Grad-CAM++, and multi-agent LLM systems.</p>
             </div>
           </div>
         </div>
@@ -191,33 +211,60 @@
   <section id="skills" class="skills-section">
     <div class="container">
       <div class="section-header animate-slideDown">
-        <p class="section-label">Expertise</p>
+        <p class="section-label">
+          <span class="label-line"></span>
+          Expertise
+        </p>
         <h2>Skills & Technologies</h2>
         <p class="section-desc">Proficient in modern tools and frameworks across full-stack development</p>
       </div>
 
       <div id="skills-grid" class="skills-grid"></div>
 
-      <div class="competencies-card">
+      <div class="competencies-card glass-card">
         <div class="competencies-header">
           <i data-lucide="trending-up"></i>
           <h3>Core Competencies</h3>
         </div>
         <div class="competencies-grid">
           <div class="competency-item">
-            <div class="competency-value">91%</div>
+            <div class="competency-ring" data-percent="91">
+              <svg viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="42" class="ring-bg"/>
+                <circle cx="50" cy="50" r="42" class="ring-fill" style="--percent:91"/>
+              </svg>
+              <div class="competency-value">91%</div>
+            </div>
             <div class="competency-label">MERN Stack</div>
           </div>
           <div class="competency-item">
-            <div class="competency-value">90%</div>
+            <div class="competency-ring" data-percent="90">
+              <svg viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="42" class="ring-bg"/>
+                <circle cx="50" cy="50" r="42" class="ring-fill" style="--percent:90"/>
+              </svg>
+              <div class="competency-value">90%</div>
+            </div>
             <div class="competency-label">AI/ML</div>
           </div>
           <div class="competency-item">
-            <div class="competency-value">85%</div>
+            <div class="competency-ring" data-percent="85">
+              <svg viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="42" class="ring-bg"/>
+                <circle cx="50" cy="50" r="42" class="ring-fill" style="--percent:85"/>
+              </svg>
+              <div class="competency-value">85%</div>
+            </div>
             <div class="competency-label">System Design</div>
           </div>
           <div class="competency-item">
-            <div class="competency-value">87%</div>
+            <div class="competency-ring" data-percent="87">
+              <svg viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="42" class="ring-bg"/>
+                <circle cx="50" cy="50" r="42" class="ring-fill" style="--percent:87"/>
+              </svg>
+              <div class="competency-value">87%</div>
+            </div>
             <div class="competency-label">DevOps</div>
           </div>
         </div>
@@ -229,7 +276,10 @@
   <section id="projects" class="projects-section">
     <div class="container">
       <div class="section-header animate-slideDown">
-        <p class="section-label">Portfolio</p>
+        <p class="section-label">
+          <span class="label-line"></span>
+          Portfolio
+        </p>
         <h2>Featured Projects</h2>
         <p class="section-desc">Explore my latest AI/ML and full-stack development projects</p>
       </div>
@@ -243,7 +293,10 @@
   <section id="timeline" class="timeline-section">
     <div class="container-sm">
       <div class="section-header animate-slideDown">
-        <p class="section-label">Journey</p>
+        <p class="section-label">
+          <span class="label-line"></span>
+          Journey
+        </p>
         <h2>Timeline & Achievements</h2>
       </div>
 
@@ -254,35 +307,26 @@
     </div>
   </section>
 
-  <!-- Blog Section -->
-  <section id="blog" class="blog-section">
-    <div class="container">
-      <div class="section-header animate-slideDown">
-        <p class="section-label">Insights</p>
-        <h2>Latest Articles</h2>
-      </div>
-
-      <div id="blog-grid" class="blog-grid"></div>
-    </div>
-  </section>
-
   <!-- Contact Section -->
   <section id="contact" class="contact-section">
     <div class="container-sm">
       <div class="section-header animate-slideDown">
-        <p class="section-label">Let's Connect</p>
+        <p class="section-label">
+          <span class="label-line"></span>
+          Let's Connect
+        </p>
         <h2>Get in Touch</h2>
         <p class="section-desc">I'm always open to interesting projects and collaboration opportunities.</p>
       </div>
 
       <div class="contact-grid">
-        <div class="contact-form-card animate-slideUp">
+        <div class="contact-form-card glass-card animate-slideUp">
           <h3>Send me a Message</h3>
           <form id="contact-form">
             <input type="text" name="name" placeholder="Your Name" required>
             <input type="email" name="email" placeholder="Your Email" required>
             <textarea name="message" rows="5" placeholder="Your Message" required></textarea>
-            <button type="submit" class="btn-submit">
+            <button type="submit" class="btn-submit glow-btn">
               <i data-lucide="send"></i>
               <span>Send Message</span>
             </button>
@@ -295,28 +339,28 @@
           <p>I'm always interested in hearing about new projects and opportunities. Feel free to reach out!</p>
 
           <div class="contact-links">
-            <a href="mailto:vivekvivek4114@gmail.com" class="contact-link">
+            <a href="mailto:vivekvivek4114@gmail.com" class="contact-link glass-card">
               <i data-lucide="mail"></i>
               <div>
                 <div class="link-title">Email</div>
                 <div class="link-subtitle">vivekvivek4114@gmail.com</div>
               </div>
             </a>
-            <a href="https://linkedin.com/in/vivek-m-a-54a220355" target="_blank" class="contact-link">
+            <a href="https://linkedin.com/in/vivek-m-a-54a220355" target="_blank" class="contact-link glass-card">
               <i data-lucide="linkedin"></i>
               <div>
                 <div class="link-title">LinkedIn</div>
                 <div class="link-subtitle">VIVEK M A</div>
               </div>
             </a>
-            <a href="https://github.com/Vivekma05" target="_blank" class="contact-link">
+            <a href="https://github.com/Vivekma05" target="_blank" class="contact-link glass-card">
               <i data-lucide="github"></i>
               <div>
                 <div class="link-title">GitHub</div>
                 <div class="link-subtitle">Vivekma05</div>
               </div>
             </a>
-            <a href="#" class="contact-link">
+            <a href="resume_194.pdf" download class="contact-link glass-card">
               <i data-lucide="file-text"></i>
               <div>
                 <div class="link-title">Resume</div>
@@ -328,7 +372,7 @@
       </div>
 
       <div class="footer">
-        <p>© 2025 AI/ML Engineer Portfolio. Designed & developed with ❤️</p>
+        <p>© 2025 Vivek M A. Designed & developed with ❤️</p>
       </div>
     </div>
   </section>
