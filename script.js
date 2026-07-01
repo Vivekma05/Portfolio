@@ -49,7 +49,7 @@ const mobileMenu = document.getElementById('mobile-menu');
 let activeSection = 'hero';
 
 function updateActiveNav() {
-  const sections = ['hero', 'about', 'skills', 'projects', 'timeline', 'contact'];
+  const sections = ['hero', 'about', 'skills', 'experience', 'projects', 'timeline', 'contact'];
   const scrollPosition = window.scrollY + 120;
 
   for (const section of sections) {
@@ -123,180 +123,218 @@ themeToggle.addEventListener('click', () => {
 });
 
 // ============================================================
-//  Typing Animation
+//  Typing Animation (disabled — hero redesigned)
 // ============================================================
-const typingSkills = ['Python', 'PyTorch', 'TensorFlow', 'FastAPI', 'LangChain', 'Deep Learning', 'NLP', 'Computer Vision'];
-let currentSkillIndex = 0;
-let displayText = '';
-let isDeleting = false;
-const typingElement = document.getElementById('typing-text');
 
-function typeEffect() {
-  const skill = typingSkills[currentSkillIndex];
 
-  if (!isDeleting) {
-    if (displayText.length < skill.length) {
-      displayText = skill.substring(0, displayText.length + 1);
-      typingElement.textContent = displayText;
-      setTimeout(typeEffect, 120);
-    } else {
-      setTimeout(() => { isDeleting = true; typeEffect(); }, 1800);
-    }
+// ============================================================
+//  3D Hero Scene (Three.js)
+// ============================================================
+const canvas = document.getElementById('particle-canvas');
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+camera.position.z = 30;
+
+// Mouse tracking for 3D interaction
+let mouse3D = { x: 0, y: 0, targetX: 0, targetY: 0 };
+document.addEventListener('mousemove', (e) => {
+  mouse3D.targetX = (e.clientX / window.innerWidth) * 2 - 1;
+  mouse3D.targetY = -(e.clientY / window.innerHeight) * 2 + 1;
+});
+
+// Floating wireframe geometries
+const geometries = [];
+const geoConfigs = [
+  { geo: new THREE.IcosahedronGeometry(4, 1), pos: [-12, 6, -8], color: 0x00d4f5, speed: 0.003 },
+  { geo: new THREE.OctahedronGeometry(3, 0), pos: [14, -4, -12], color: 0xa855f7, speed: 0.004 },
+  { geo: new THREE.TorusGeometry(3, 0.8, 8, 16), pos: [-8, -8, -6], color: 0xec4899, speed: 0.002 },
+  { geo: new THREE.DodecahedronGeometry(2.5, 0), pos: [10, 8, -10], color: 0x34d399, speed: 0.005 },
+  { geo: new THREE.TetrahedronGeometry(3, 0), pos: [0, -12, -14], color: 0x00d4f5, speed: 0.003 },
+  { geo: new THREE.IcosahedronGeometry(2, 0), pos: [-16, 0, -16], color: 0xa855f7, speed: 0.004 },
+];
+
+geoConfigs.forEach(config => {
+  const material = new THREE.MeshBasicMaterial({
+    color: config.color,
+    wireframe: true,
+    transparent: true,
+    opacity: 0.25,
+  });
+  const mesh = new THREE.Mesh(config.geo, material);
+  mesh.position.set(...config.pos);
+  mesh.userData = {
+    speed: config.speed,
+    originalPos: [...config.pos],
+    floatOffset: Math.random() * Math.PI * 2,
+  };
+  scene.add(mesh);
+  geometries.push(mesh);
+});
+
+// 3D Particle field
+const particleCount = 300;
+const particleGeometry = new THREE.BufferGeometry();
+const positions = new Float32Array(particleCount * 3);
+const colors = new Float32Array(particleCount * 3);
+
+for (let i = 0; i < particleCount; i++) {
+  positions[i * 3] = (Math.random() - 0.5) * 80;
+  positions[i * 3 + 1] = (Math.random() - 0.5) * 80;
+  positions[i * 3 + 2] = (Math.random() - 0.5) * 80;
+
+  const colorChoice = Math.random();
+  if (colorChoice < 0.33) {
+    colors[i * 3] = 0; colors[i * 3 + 1] = 0.83; colors[i * 3 + 2] = 0.96;
+  } else if (colorChoice < 0.66) {
+    colors[i * 3] = 0.66; colors[i * 3 + 1] = 0.33; colors[i * 3 + 2] = 0.97;
   } else {
-    if (displayText.length > 0) {
-      displayText = skill.substring(0, displayText.length - 1);
-      typingElement.textContent = displayText;
-      setTimeout(typeEffect, 60);
-    } else {
-      isDeleting = false;
-      currentSkillIndex = (currentSkillIndex + 1) % typingSkills.length;
-      setTimeout(typeEffect, 200);
-    }
+    colors[i * 3] = 0.93; colors[i * 3 + 1] = 0.28; colors[i * 3 + 2] = 0.6;
   }
 }
 
-typeEffect();
+particleGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+particleGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
 
-// ============================================================
-//  Particle Canvas
-// ============================================================
-const canvas = document.getElementById('particle-canvas');
-const ctx = canvas.getContext('2d');
-
-function resizeCanvas() {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-}
-
-resizeCanvas();
-window.addEventListener('resize', resizeCanvas);
-
-const particles = [];
-const particleCount = Math.min(70, Math.floor(window.innerWidth / 20));
-
-for (let i = 0; i < particleCount; i++) {
-  particles.push({
-    x: Math.random() * canvas.width,
-    y: Math.random() * canvas.height,
-    vx: (Math.random() - 0.5) * 1.2,
-    vy: (Math.random() - 0.5) * 1.2,
-    size: Math.random() * 2 + 0.5,
-    opacity: Math.random() * 0.3 + 0.05,
-    hue: 180 + Math.random() * 60,
-  });
-}
-
-let mouseParticle = { x: -9999, y: -9999 };
-document.addEventListener('mousemove', (e) => {
-  mouseParticle.x = e.clientX;
-  mouseParticle.y = e.clientY;
+const particleMaterial = new THREE.PointsMaterial({
+  size: 0.12,
+  vertexColors: true,
+  transparent: true,
+  opacity: 0.6,
+  blending: THREE.AdditiveBlending,
 });
 
-function animateParticles() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+const particleField = new THREE.Points(particleGeometry, particleMaterial);
+scene.add(particleField);
 
-  particles.forEach(particle => {
-    particle.x += particle.vx;
-    particle.y += particle.vy;
-    particle.opacity += (Math.random() - 0.5) * 0.01;
+// Connection lines between nearby particles
+const linesMaterial = new THREE.LineBasicMaterial({
+  color: 0x00d4f5,
+  transparent: true,
+  opacity: 0.06,
+  blending: THREE.AdditiveBlending,
+});
 
-    if (particle.x < 0 || particle.x > canvas.width) particle.vx *= -1;
-    if (particle.y < 0 || particle.y > canvas.height) particle.vy *= -1;
-    particle.opacity = Math.max(0.05, Math.min(0.4, particle.opacity));
+// Animation loop
+const clock = new THREE.Clock();
 
-    const dx = mouseParticle.x - particle.x;
-    const dy = mouseParticle.y - particle.y;
-    const dist = Math.sqrt(dx * dx + dy * dy);
-    if (dist < 150) {
-      const force = (150 - dist) / 150;
-      particle.x -= dx * force * 0.02;
-      particle.y -= dy * force * 0.02;
-    }
+function animate3D() {
+  requestAnimationFrame(animate3D);
+  const elapsed = clock.getElapsedTime();
 
-    ctx.fillStyle = `hsla(${particle.hue}, 100%, 65%, ${particle.opacity})`;
-    ctx.beginPath();
-    ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
-    ctx.fill();
+  // Smooth mouse follow
+  mouse3D.x += (mouse3D.targetX - mouse3D.x) * 0.05;
+  mouse3D.y += (mouse3D.targetY - mouse3D.y) * 0.05;
 
-    particles.forEach(other => {
-      const ddx = particle.x - other.x;
-      const ddy = particle.y - other.y;
-      const distance = Math.sqrt(ddx * ddx + ddy * ddy);
+  // Rotate and float geometries
+  geometries.forEach(mesh => {
+    mesh.rotation.x += mesh.userData.speed;
+    mesh.rotation.y += mesh.userData.speed * 0.7;
+    mesh.rotation.z += mesh.userData.speed * 0.3;
 
-      if (distance < 160) {
-        const lineOpacity = 0.08 * (1 - distance / 160);
-        ctx.strokeStyle = `hsla(${particle.hue}, 100%, 65%, ${lineOpacity})`;
-        ctx.lineWidth = 0.5;
-        ctx.beginPath();
-        ctx.moveTo(particle.x, particle.y);
-        ctx.lineTo(other.x, other.y);
-        ctx.stroke();
-      }
-    });
+    const floatY = Math.sin(elapsed * 0.5 + mesh.userData.floatOffset) * 1.5;
+    const floatX = Math.cos(elapsed * 0.3 + mesh.userData.floatOffset) * 0.8;
+    mesh.position.y = mesh.userData.originalPos[1] + floatY;
+    mesh.position.x = mesh.userData.originalPos[0] + floatX;
   });
 
-  requestAnimationFrame(animateParticles);
+  // Rotate particle field
+  particleField.rotation.y = elapsed * 0.02;
+  particleField.rotation.x = elapsed * 0.01;
+
+  // Camera follows mouse
+  camera.position.x += (mouse3D.x * 3 - camera.position.x) * 0.02;
+  camera.position.y += (mouse3D.y * 2 - camera.position.y) * 0.02;
+  camera.lookAt(scene.position);
+
+  renderer.render(scene, camera);
 }
 
-animateParticles();
+animate3D();
+
+// Handle resize
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+
+// ============================================================
+//  3D Tilt Effect on Cards
+// ============================================================
+function init3DTilt() {
+  const tiltCards = document.querySelectorAll(
+    '.project-card, .skill-category, .experience-card, .achievement-card, .expertise-card, .contact-link, .timeline-content'
+  );
+
+  tiltCards.forEach(card => {
+    card.style.transformStyle = 'preserve-3d';
+    card.style.willChange = 'transform';
+
+    card.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+
+      const rotateX = ((y - centerY) / centerY) * -8;
+      const rotateY = ((x - centerX) / centerX) * 8;
+
+      card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+    });
+
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+      card.style.transition = 'transform 0.5s ease';
+    });
+
+    card.addEventListener('mouseenter', () => {
+      card.style.transition = 'transform 0.1s ease';
+    });
+  });
+}
+
+// Init tilt after content loads
+setTimeout(init3DTilt, 200);
+// Re-init after dynamic content renders
+const _origRenderProjects = typeof renderProjects !== 'undefined' ? renderProjects : null;
 
 // ============================================================
 //  Skills Data (from Resume)
 // ============================================================
 const skillCategories = [
   {
-    name: 'Languages',
-    skills: [
-      { name: 'Python', level: 95 },
-      { name: 'JavaScript', level: 85 },
-      { name: 'Java', level: 80 },
-      { name: 'C', level: 78 },
-    ],
+    name: 'Programming',
+    icon: 'code-2',
+    skills: ['Python', 'JavaScript', 'TypeScript', 'Java', 'C'],
+  },
+  {
+    name: 'Frontend',
+    icon: 'layout-dashboard',
+    skills: ['React', 'Next.js', 'HTML', 'CSS', 'Tailwind CSS'],
+  },
+  {
+    name: 'Backend',
+    icon: 'server',
+    skills: ['FastAPI', 'Flask', 'REST APIs', 'Node.js'],
+  },
+  {
+    name: 'Databases',
+    icon: 'database',
+    skills: ['PostgreSQL', 'MongoDB', 'Redis', 'ChromaDB', 'FAISS'],
   },
   {
     name: 'Machine Learning',
-    skills: [
-      { name: 'Deep Learning', level: 93 },
-      { name: 'CNNs & Transformers', level: 91 },
-      { name: 'NLP', level: 88 },
-      { name: 'Computer Vision', level: 90 },
-    ],
+    icon: 'brain',
+    skills: ['PyTorch', 'TensorFlow', 'Scikit-Learn', 'OpenCV', 'Hugging Face', 'YOLO'],
   },
   {
-    name: 'ML Libraries & Tools',
-    skills: [
-      { name: 'PyTorch', level: 92 },
-      { name: 'TensorFlow', level: 90 },
-      { name: 'Scikit-learn', level: 88 },
-      { name: 'LangChain', level: 85 },
-    ],
-  },
-  {
-    name: 'ML Tools & Platforms',
-    skills: [
-      { name: 'Hugging Face', level: 86 },
-      { name: 'OpenCV / MediaPipe', level: 88 },
-      { name: 'Streamlit', level: 87 },
-      { name: 'NumPy / Pandas', level: 92 },
-    ],
-  },
-  {
-    name: 'Web & Backend',
-    skills: [
-      { name: 'FastAPI', level: 88 },
-      { name: 'HTML / CSS', level: 85 },
-      { name: 'REST APIs', level: 87 },
-      { name: 'React / Next.js', level: 82 },
-    ],
-  },
-  {
-    name: 'Databases & DevOps',
-    skills: [
-      { name: 'PostgreSQL / MongoDB', level: 85 },
-      { name: 'Redis / ChromaDB / FAISS', level: 83 },
-      { name: 'Docker', level: 80 },
-      { name: 'Git / GitHub / Linux', level: 90 },
-    ],
+    name: 'Tools',
+    icon: 'wrench',
+    skills: ['Git', 'GitHub', 'Streamlit'],
   },
 ];
 
@@ -308,21 +346,11 @@ skillCategories.forEach(category => {
 
   categoryDiv.innerHTML = `
     <div class="skill-header">
-      <i data-lucide="zap"></i>
+      <i data-lucide="${category.icon}"></i>
       <h3>${category.name}</h3>
     </div>
-    <div class="skill-list">
-      ${category.skills.map(skill => `
-        <div class="skill-item">
-          <div class="skill-info">
-            <span class="skill-name">${skill.name}</span>
-            <span class="skill-percent">${skill.level}%</span>
-          </div>
-          <div class="skill-bar">
-            <div class="skill-progress" data-level="${skill.level}" style="width: 0%"></div>
-          </div>
-        </div>
-      `).join('')}
+    <div class="skill-tags">
+      ${category.skills.map(skill => `<span class="skill-tag">${skill}</span>`).join('')}
     </div>
   `;
 
@@ -330,23 +358,6 @@ skillCategories.forEach(category => {
 });
 
 lucide.createIcons();
-
-// Animate skill bars on scroll
-const skillObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      const progressBars = entry.target.querySelectorAll('.skill-progress');
-      progressBars.forEach((bar, index) => {
-        setTimeout(() => {
-          bar.style.width = bar.dataset.level + '%';
-        }, index * 120);
-      });
-      skillObserver.unobserve(entry.target);
-    }
-  });
-}, { threshold: 0.1 });
-
-skillObserver.observe(document.getElementById('skills'));
 
 // ============================================================
 //  Projects Data
@@ -529,6 +540,7 @@ function renderProjects() {
   lucide.createIcons();
 
   if (typeof window._refreshCursorListeners === 'function') window._refreshCursorListeners();
+  if (typeof init3DTilt === 'function') init3DTilt();
 }
 
 renderProjects();
@@ -610,13 +622,13 @@ lucide.createIcons();
 const contactForm = document.getElementById('contact-form');
 const formStatus = document.getElementById('form-status');
 
-contactForm.addEventListener('submit', (e) => {
+contactForm.addEventListener('submit', async (e) => {
   e.preventDefault();
 
   const formData = new FormData(contactForm);
-  const name = formData.get('name');
-  const email = formData.get('email');
-  const message = formData.get('message');
+  const name = formData.get('name').trim();
+  const email = formData.get('email').trim();
+  const message = formData.get('message').trim();
 
   if (!name || !email || !message) {
     formStatus.textContent = '✗ Please fill all fields';
@@ -626,12 +638,44 @@ contactForm.addEventListener('submit', (e) => {
     return;
   }
 
-  formStatus.textContent = '✓ Message sent successfully!';
-  formStatus.className = 'form-status success';
-  formStatus.classList.remove('hidden');
-  contactForm.reset();
+  // Show loading state
+  const submitBtn = contactForm.querySelector('.btn-submit');
+  const originalBtnText = submitBtn.innerHTML;
+  submitBtn.innerHTML = '<span>Sending...</span>';
+  submitBtn.disabled = true;
 
-  setTimeout(() => formStatus.classList.add('hidden'), 3000);
+  try {
+    const response = await fetch('https://api.web3forms.com/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        access_key: 'c292a243-1dd1-4618-a5ff-68b3861bacd5',
+        name: name,
+        email: email,
+        message: message,
+        subject: `Portfolio Contact from ${name}`,
+      }),
+    });
+
+    const result = await response.json();
+
+    if (result.success) {
+      formStatus.textContent = '✓ Message sent successfully!';
+      formStatus.className = 'form-status success';
+      contactForm.reset();
+    } else {
+      formStatus.textContent = '✗ Failed to send. Please try again.';
+      formStatus.className = 'form-status error';
+    }
+  } catch (error) {
+    formStatus.textContent = '✗ Network error. Please try again.';
+    formStatus.className = 'form-status error';
+  }
+
+  submitBtn.innerHTML = originalBtnText;
+  submitBtn.disabled = false;
+  formStatus.classList.remove('hidden');
+  setTimeout(() => formStatus.classList.add('hidden'), 4000);
 });
 
 // ============================================================
