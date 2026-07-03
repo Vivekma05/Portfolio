@@ -628,10 +628,11 @@ contactForm.addEventListener('submit', async (e) => {
   const formData = new FormData(contactForm);
   const name = formData.get('name').trim();
   const email = formData.get('email').trim();
+  const subject = formData.get('subject')?.trim() || `Portfolio Contact from ${name}`;
   const message = formData.get('message').trim();
 
   if (!name || !email || !message) {
-    formStatus.textContent = '✗ Please fill all fields';
+    formStatus.textContent = '✗ Please fill all required fields';
     formStatus.className = 'form-status error';
     formStatus.classList.remove('hidden');
     setTimeout(() => formStatus.classList.add('hidden'), 3000);
@@ -645,29 +646,34 @@ contactForm.addEventListener('submit', async (e) => {
   submitBtn.disabled = true;
 
   try {
-    const response = await fetch('https://api.web3forms.com/submit', {
+    const response = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        access_key: 'c292a243-1dd1-4618-a5ff-68b3861bacd5',
-        name: name,
-        email: email,
-        message: message,
-        subject: `Portfolio Contact from ${name}`,
+        service_id: 'service_b3tfmpe',
+        template_id: 'template_a0amy0r',
+        user_id: 'FFl8in16VA08VkJ0L',
+        template_params: {
+          name: name,
+          email: email,
+          subject: subject,
+          message: message,
+        },
       }),
     });
 
-    const result = await response.json();
-
-    if (result.success) {
+    if (response.ok) {
       formStatus.textContent = '✓ Message sent successfully!';
       formStatus.className = 'form-status success';
       contactForm.reset();
     } else {
+      const errorText = await response.text();
+      console.error('EmailJS Error:', errorText);
       formStatus.textContent = '✗ Failed to send. Please try again.';
       formStatus.className = 'form-status error';
     }
   } catch (error) {
+    console.error('Network Error:', error);
     formStatus.textContent = '✗ Network error. Please try again.';
     formStatus.className = 'form-status error';
   }
